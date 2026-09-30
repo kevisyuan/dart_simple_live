@@ -39,6 +39,13 @@ jobs:
       - name: Check formatting
         working-directory: simple_live_app
         run: fvm dart format --output=none --set-exit-if-changed lib/modules/live_room/live_room_controller.dart lib/modules/live_room/live_room_page.dart test/douyu_playback_recovery_test.dart
+      - name: Test Douyu stream requests
+        working-directory: simple_live_core
+        run: |
+          dart pub get
+          dart format --output=none --set-exit-if-changed lib/src/douyu_site.dart test/douyu_play_request_test.dart
+          dart analyze lib/src/douyu_site.dart test/douyu_play_request_test.dart
+          dart test test/douyu_play_request_test.dart
       - name: Analyze
         working-directory: simple_live_app
         run: fvm flutter analyze
