@@ -38,7 +38,7 @@ jobs:
           fvm flutter pub get
       - name: Check formatting
         working-directory: simple_live_app
-        run: fvm dart format --output=none --set-exit-if-changed lib/modules/live_room/live_room_controller.dart lib/modules/live_room/live_room_page.dart lib/modules/mine/account/account_controller.dart lib/modules/mine/account/account_page.dart lib/services/douyu_account_service.dart lib/services/local_storage_service.dart lib/main.dart test/douyu_playback_recovery_test.dart test/douyu_account_test.dart
+        run: fvm dart format --output=none --set-exit-if-changed lib/modules/live_room/live_room_controller.dart lib/modules/live_room/live_room_page.dart lib/modules/live_room/player/player_controls.dart lib/modules/mine/account/account_controller.dart lib/modules/mine/account/account_page.dart lib/services/douyu_account_service.dart lib/services/local_storage_service.dart lib/main.dart test/douyu_playback_recovery_test.dart test/douyu_account_test.dart
       - name: Test Douyu Cookie requests
         working-directory: simple_live_core
         run: |

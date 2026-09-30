@@ -152,13 +152,18 @@ class LiveRoomPage extends GetView<LiveRoomController> {
               Expanded(
                 child: buildMediaPlayer(),
               ),
-              SizedBox(
-                width: 300,
-                child: Column(
-                  children: [
-                    buildUserProfile(context),
-                    buildMessageArea(),
-                  ],
+              Obx(
+                () => Offstage(
+                  offstage: !controller.showRoomSidebar.value,
+                  child: SizedBox(
+                    width: 300,
+                    child: Column(
+                      children: [
+                        buildUserProfile(context),
+                        buildMessageArea(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

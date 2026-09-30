@@ -54,6 +54,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   var online = 0.obs;
   var followed = false.obs;
   var liveStatus = false.obs;
+
+  /// 横屏布局中的主播信息和聊天侧栏。
+  final showRoomSidebar = true.obs;
+
   RxList<LiveSuperChatMessage> superChats = RxList<LiveSuperChatMessage>();
 
   /// 滚动控制

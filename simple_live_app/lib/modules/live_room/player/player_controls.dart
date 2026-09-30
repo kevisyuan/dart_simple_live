@@ -596,6 +596,18 @@ Widget buildControls(
                     ),
                   ),
                 ),
+                if (!isPortrait)
+                  IconButton(
+                    tooltip:
+                        controller.showRoomSidebar.value ? "隐藏右侧栏" : "显示右侧栏",
+                    onPressed: () => controller.showRoomSidebar.toggle(),
+                    icon: Icon(
+                      controller.showRoomSidebar.value
+                          ? Icons.view_sidebar
+                          : Icons.view_sidebar_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
                 Visibility(
                   visible: !Platform.isAndroid && !Platform.isIOS,
                   child: IconButton(
