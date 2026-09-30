@@ -19,10 +19,6 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:simple_live_core/src/scripts/douyu_sign.dart';
 
 class DouyuSite implements LiveSite {
-  // Keep quality discovery and stream requests consistent. Omitting ive=1
-  // makes high-bitrate streams use expire=300 and disconnect after five minutes.
-  static const _playerParams = "&ver=Douyu_223061205&iar=1&ive=1&hevc=0&fa=0";
-
   @override
   String id = "douyu";
 
@@ -100,7 +96,7 @@ class DouyuSite implements LiveSite {
     required LiveRoomDetail detail,
   }) async {
     var data = detail.data.toString();
-    data += "&cdn=&rate=-1$_playerParams";
+    data += "&cdn=&rate=-1&ver=Douyu_223061205&iar=1&ive=1&hevc=0&fa=0";
     List<LivePlayQuality> qualities = [];
     var result = await HttpClient.instance.postJson(
       "https://www.douyu.com/lapi/live/getH5Play/${detail.roomId}",
@@ -158,7 +154,7 @@ class DouyuSite implements LiveSite {
     int rate,
     String cdn,
   ) async {
-    args += "&cdn=$cdn&rate=$rate$_playerParams";
+    args += "&cdn=$cdn&rate=$rate";
     var result = await HttpClient.instance.postJson(
       "https://www.douyu.com/lapi/live/getH5Play/$roomId",
       data: args,
