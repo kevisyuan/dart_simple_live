@@ -38,7 +38,7 @@ jobs:
         run: fvm dart format --output=none --set-exit-if-changed lib/modules/live_room/live_room_controller.dart lib/modules/live_room/live_room_page.dart test/douyu_playback_recovery_test.dart
       - name: Analyze
         working-directory: simple_live_app
-        run: fvm flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: fvm flutter analyze
       - name: Test
         working-directory: simple_live_app
         run: fvm flutter test

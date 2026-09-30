@@ -32,7 +32,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   final Site pSite;
   final String pRoomId;
   late LiveDanmaku liveDanmaku;
-  LiveRoomController({required this.pSite, required this.pRoomId}) {
+  LiveRoomController({
+    required this.pSite,
+    required this.pRoomId,
+  }) {
     rxSite = pSite.obs;
     rxRoomId = pRoomId.obs;
     liveDanmaku = site.liveSite.getDanmaku();
@@ -176,13 +179,8 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
           exit(0);
         });
         autoExitTimer?.cancel();
-        var delay = await Utils.showAlertDialog(
-          "定时关闭已到时,是否延迟关闭?",
-          title: "延迟关闭",
-          confirm: "延迟",
-          cancel: "关闭",
-          selectable: true,
-        );
+        var delay = await Utils.showAlertDialog("定时关闭已到时,是否延迟关闭?",
+            title: "延迟关闭", confirm: "延迟", cancel: "关闭", selectable: true);
         if (delay) {
           timer.cancel();
           delayAutoExit.value = true;
@@ -254,7 +252,9 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
 
       messages.add(msg);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) => chatScrollToBottom());
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => chatScrollToBottom(),
+      );
       if (!liveStatus.value || isBackground) {
         return;
       }
@@ -262,7 +262,12 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
       addDanmaku([
         DanmakuContentItem(
           msg.message,
-          color: Color.fromARGB(255, msg.color.r, msg.color.g, msg.color.b),
+          color: Color.fromARGB(
+            255,
+            msg.color.r,
+            msg.color.g,
+            msg.color.b,
+          ),
         ),
       ]);
     } else if (msg.type == LiveMessageType.online) {
@@ -502,7 +507,9 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
     if (!_acceptPlaybackEvents ||
         _playbackClosed ||
         site.id != Constant.kDouyu ||
-        detail.value == null) return;
+        detail.value == null) {
+      return;
+    }
     final generation = _playbackGeneration;
     if (_recoveryGeneration == generation) {
       _recoveryPending = true;
@@ -661,9 +668,8 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   /// 读取SC
   void getSuperChatMessage() async {
     try {
-      var sc = await site.liveSite.getSuperChatMessage(
-        roomId: detail.value!.roomId,
-      );
+      var sc =
+          await site.liveSite.getSuperChatMessage(roomId: detail.value!.roomId);
       superChats.addAll(sc);
     } catch (e) {
       Log.logPrint(e);
@@ -757,10 +763,8 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
     if (!liveStatus.value) {
       return;
     }
-    var playUrl = await site.liveSite.getPlayUrls(
-      detail: detail.value!,
-      quality: qualites[currentQuality],
-    );
+    var playUrl = await site.liveSite
+        .getPlayUrls(detail: detail.value!, quality: qualites[currentQuality]);
     if (playUrl.urls.isEmpty) {
       SmartDialog.showToast("无法读取播放地址");
       return;
@@ -834,7 +838,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
           itemCount: qualites.length,
           itemBuilder: (_, i) {
             var item = qualites[i];
-            return RadioListTile(value: i, title: Text(item.quality));
+            return RadioListTile(
+              value: i,
+              title: Text(item.quality),
+            );
           },
         ),
       ),
@@ -858,7 +865,9 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
             return RadioListTile(
               value: i,
               title: Text("线路${i + 1}"),
-              secondary: Text(playUrls[i].contains(".flv") ? "FLV" : "HLS"),
+              secondary: Text(
+                playUrls[i].contains(".flv") ? "FLV" : "HLS",
+              ),
             );
           },
         ),
@@ -920,9 +929,8 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
         return;
       }
 
-      AppSettingsController.instance.addShieldList(
-        keywordController.text.trim(),
-      );
+      AppSettingsController.instance
+          .addShieldList(keywordController.text.trim());
       keywordController.text = "";
     }
 
@@ -975,7 +983,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
                           top: 4,
                           bottom: 4,
                         ),
-                        child: Text(item, style: Get.textTheme.bodyMedium),
+                        child: Text(
+                          item,
+                          style: Get.textTheme.bodyMedium,
+                        ),
                       ),
                     ),
                   )
@@ -1006,7 +1017,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
                           rxRoomId.value == item.roomId,
                       onTap: () {
                         Get.back();
-                        resetRoom(Sites.allSites[item.siteId]!, item.roomId);
+                        resetRoom(
+                          Sites.allSites[item.siteId]!,
+                          item.roomId,
+                        );
                       },
                     ),
                   );
@@ -1042,7 +1056,10 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
         children: [
           Obx(
             () => SwitchListTile(
-              title: Text("启用定时关闭", style: Get.textTheme.titleMedium),
+              title: Text(
+                "启用定时关闭",
+                style: Get.textTheme.titleMedium,
+              ),
               value: autoExitEnable.value,
               onChanged: (e) {
                 autoExitEnable.value = e;
@@ -1080,14 +1097,11 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
                 if (value == null || (value.hour == 0 && value.minute == 0)) {
                   return;
                 }
-                var duration = Duration(
-                  hours: value.hour,
-                  minutes: value.minute,
-                );
+                var duration =
+                    Duration(hours: value.hour, minutes: value.minute);
                 autoExitMinutes.value = duration.inMinutes;
-                AppSettingsController.instance.setRoomAutoExitDuration(
-                  autoExitMinutes.value,
-                );
+                AppSettingsController.instance
+                    .setRoomAutoExitDuration(autoExitMinutes.value);
                 //setAutoExitDuration(duration.inMinutes);
                 setAutoExit();
               },

@@ -10,6 +10,8 @@ import 'package:simple_live_core/simple_live_core.dart';
 
 class TestSettings extends AppSettingsController {
   @override
+  // Settings persistence is deliberately excluded from playback tests.
+  // ignore: must_call_super
   void onInit() {}
 }
 
@@ -135,7 +137,7 @@ void main() {
 
   tearDown(() async {
     controller.scrollController.dispose();
-    await Get.reset();
+    Get.reset();
   });
 
   testWidgets('refreshes the signature and URL while preserving quality', (
