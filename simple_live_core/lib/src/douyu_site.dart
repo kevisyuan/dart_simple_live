@@ -19,6 +19,9 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:simple_live_core/src/scripts/douyu_sign.dart';
 
 class DouyuSite implements LiveSite {
+  /// Account Cookie for Douyu's playback API, never for the video CDN.
+  String cookie = "";
+
   @override
   String id = "douyu";
 
@@ -101,6 +104,7 @@ class DouyuSite implements LiveSite {
     var result = await HttpClient.instance.postJson(
       "https://www.douyu.com/lapi/live/getH5Play/${detail.roomId}",
       data: data,
+      header: {if (cookie.isNotEmpty) 'Cookie': cookie},
       formUrlEncoded: true,
     );
 
@@ -159,6 +163,7 @@ class DouyuSite implements LiveSite {
       "https://www.douyu.com/lapi/live/getH5Play/$roomId",
       data: args,
       header: {
+        if (cookie.isNotEmpty) 'Cookie': cookie,
         'referer': 'https://www.douyu.com/$roomId',
         'user-agent':
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.43",

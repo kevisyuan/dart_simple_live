@@ -7,6 +7,7 @@ import 'package:simple_live_app/app/utils.dart';
 import 'package:simple_live_app/routes/route_path.dart';
 import 'package:simple_live_app/services/bilibili_account_service.dart';
 import 'package:simple_live_app/services/douyin_account_service.dart';
+import 'package:simple_live_app/services/douyu_account_service.dart';
 import 'package:simple_live_core/simple_live_core.dart';
 
 class AccountController extends GetxController {
@@ -79,9 +80,44 @@ class AccountController extends GetxController {
     await BiliBiliAccountService.instance.loadUserInfo();
   }
 
+  Future<void> douyuTap() async {
+    if (DouyuAccountService.instance.hasCookie.value) {
+      final confirmed =
+          await Utils.showAlertDialog("确定要退出斗鱼账号吗？", title: "退出登录");
+      if (!confirmed) return;
+      try {
+        await DouyuAccountService.instance.logout();
+        SmartDialog.showToast("已退出斗鱼账号");
+      } catch (_) {
+        SmartDialog.showToast("退出失败，请重试");
+      }
+      return;
+    }
+    final cookie = await Utils.showEditTextDialog(
+      "",
+      title: "斗鱼 Cookie 登录",
+      hintText: "请粘贴已登录斗鱼网页的 Cookie",
+      validate: (value) {
+        if (!value.contains("=") || value.contains(RegExp(r"[\r\n]"))) {
+          SmartDialog.showToast("请粘贴完整的单行 Cookie");
+          return false;
+        }
+        return true;
+      },
+    );
+    if (cookie == null || cookie.trim().isEmpty) return;
+    try {
+      await DouyuAccountService.instance.setCookie(cookie);
+      SmartDialog.showToast("Cookie 已保存，请重新进入直播间并选择原画");
+    } catch (_) {
+      SmartDialog.showToast("Cookie 保存失败，请重试");
+    }
+  }
+
   void douyinTap() async {
     if (DouyinAccountService.instance.hasCookie.value) {
-      var result = await Utils.showAlertDialog("确定要清除自定义 ttwid 吗？", title: "清除配置");
+      var result =
+          await Utils.showAlertDialog("确定要清除自定义 ttwid 吗？", title: "清除配置");
       if (result) {
         DouyinAccountService.instance.clearCookie();
         SmartDialog.showToast("已清除自定义 ttwid，将使用默认 ttwid");
